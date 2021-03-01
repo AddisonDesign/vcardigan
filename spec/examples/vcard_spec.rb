@@ -296,6 +296,25 @@ describe VCardigan::VCard do
     end
   end
 
+  describe '#to_s' do
+    let(:vcard) { VCardigan.create }
+    
+    context 'MS hack params with an FN and N' do
+    before do
+      vcard.name('Strummer', 'Joe', :charset => 'utf-8')
+      vcard.fullname('Joe Strummer', :charset => 'utf-8')
+    end
+    
+    it 'should include the N field with CHARSET' do
+      vcard.to_s.split("\n")[2].should == 'N;CHARSET=utf-8:Strummer;Joe;;;'
+    end
+
+    it 'should include the FN field with CHARSET' do
+      vcard.to_s.split("\n")[3].should == 'FN;CHARSET=utf-8:Joe Strummer'
+    end
+  end
+end
+
   describe "#valid?" do
     let(:vcard) { VCardigan.create }
 
